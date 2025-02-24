@@ -1,5 +1,5 @@
 import { Request,Response,NextFunction } from "express";
-import  Jwt  from "jsonwebtoken";
+import  jwt  from "jsonwebtoken";
 
 declare global{
     interface jwtPayload{
@@ -21,7 +21,7 @@ export const currentUser=async(req:Request,res:Response,next:NextFunction)=>{
     }
 
     try {
-        const payload= (Jwt.verify(req.session?.jwt,process.env.JWT_KEY as string) as jwtPayload);
+        const payload= (jwt.verify(req.session?.jwt,process.env.JWT_KEY as string) as jwtPayload);
         req.currentUser=payload
     } catch (error) {
         return next(error)
