@@ -21,10 +21,10 @@ export const currentUser=async(req:Request,res:Response,next:NextFunction)=>{
     }
 
     try {
-        const payload= (jwt.verify(req.session?.jwt,process.env.JWT_KEY as string) as jwtPayload);
-        req.currentUser=payload
+        const payload = jwt.verify(req.session?.jwt, process.env.JWT_KEY as string) as jwtPayload;
+        req.currentUser = payload;
     } catch (error) {
-        return next(error)
+        return next()
     }
 
     next()
