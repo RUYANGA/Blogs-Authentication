@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "compile": "tsc && node ./dist/src/main.js",
-    "start": "nodemon -e  ts --exec \"npm run compile\""
+    "dev": "nodemon -e  ts --exec \"npm run compile\"",
+    "start":"node dist/main.js",
+    "build":"tsc"
     },
   "keywords": [
     "express",
