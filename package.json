@@ -5,10 +5,8 @@
   "main": "index.js",
   "scripts": {
     "compile": "tsc && node ./dist/src/main.js",
-    "dev": "nodemon -e  ts --exec \"npm run compile\"",
-    "build": "tsc",
-    "start": "node dist/src/main.js"
-  },
+    "start": "nodemon -e  ts --exec \"npm run compile\""
+    },
   "keywords": [
     "express",
     "mongoose",
