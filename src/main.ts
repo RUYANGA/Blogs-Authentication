@@ -43,6 +43,7 @@ mongoose.connect(url).then(()=>{
 app.use(signupRouter)
 app.use(signinRouter)
 app.use(signoutRouter)
+app.use(showPostRouter);
 
 
 app.use(currentUser)
