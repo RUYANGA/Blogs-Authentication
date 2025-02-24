@@ -42,11 +42,11 @@ mongoose.connect(url).then(()=>{
 //Post routers
 app.use(signupRouter)
 app.use(signinRouter)
-app.use(showPostRouter);
 app.use(signoutRouter)
 
 
 app.use(currentUser)
+app.use(requireAuth,showPostRouter);
 app.use(requireAuth,newPostRouter);
 app.use(requireAuth,updatePostRouter);
 app.use(requireAuth,deletePostRouter);
