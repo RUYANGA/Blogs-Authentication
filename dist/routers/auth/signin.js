@@ -39,5 +39,5 @@ router.post('/user/signin', (req, res, next) => __awaiter(void 0, void 0, void 0
         expiresIn: '20day'
     });
     req.session = { jwt: token };
-    res.status(200).json({ User: userExist });
+    res.status(200).json({ User: userExist, token: token });
 }));

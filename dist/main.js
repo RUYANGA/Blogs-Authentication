@@ -70,9 +70,10 @@ mongoose_1.default.connect(url).then(() => {
 //Post routers
 app.use(routers_1.signupRouter);
 app.use(routers_1.signinRouter);
-app.use(routers_1.showPostRouter);
 app.use(signout_1.signoutRouter);
+app.use(routers_1.showPostRouter);
 app.use(common_1.currentUser);
+app.use(common_1.requireAuth, routers_1.showPostRouter);
 app.use(common_1.requireAuth, routers_1.newPostRouter);
 app.use(common_1.requireAuth, routers_1.updatePostRouter);
 app.use(common_1.requireAuth, routers_1.deletePostRouter);

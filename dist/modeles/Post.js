@@ -18,11 +18,10 @@ const postSchem = new mongoose_1.default.Schema({
         type: String,
         required: true
     },
-    images: [
-        { src: { type: String,
-                required: true
-            } }
-    ],
+    images: {
+        type: String,
+        required: true
+    },
     comment: [
         {
             type: mongoose_1.default.Schema.Types.ObjectId,

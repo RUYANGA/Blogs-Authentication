@@ -12,20 +12,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.currentUser = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const currentUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
-    if (!((_a = req.session) === null || _a === void 0 ? void 0 : _a.jwt)) {
-        next();
-    }
-    try {
-        const payload = jsonwebtoken_1.default.verify((_b = req.session) === null || _b === void 0 ? void 0 : _b.jwt, process.env.JWT_KEY);
-        req.currentUser = payload;
-    }
-    catch (error) {
-        return next();
-    }
-    next();
-});
-exports.currentUser = currentUser;
+exports.showUserRouter = void 0;
+const user_1 = __importDefault(require("../../modeles/user"));
+const express_1 = require("express");
+const router = (0, express_1.Router)();
+exports.showUserRouter = router;
+router.get('/user/show', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    if (!id)
+        return next(new Error('User id required'));
+    const existUser = yield user_1.default.findById({ _id: id });
+    if (!existUser)
+        return next(new Error('User with id not found'));
+    res.status(200).json({ user: existUser });
+}));

@@ -10,6 +10,7 @@ export *from './comment/Delete'
 
 export *from './auth/signup'
 export*from './auth/signin'
+export *from './auth/signout'
 export*from'./auth/current-user'
 export*from './auth/update-user'
 export *from './auth/delete-account'

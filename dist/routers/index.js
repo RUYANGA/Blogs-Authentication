@@ -24,6 +24,7 @@ __exportStar(require("./comment/New"), exports);
 __exportStar(require("./comment/Delete"), exports);
 __exportStar(require("./auth/signup"), exports);
 __exportStar(require("./auth/signin"), exports);
+__exportStar(require("./auth/signout"), exports);
 __exportStar(require("./auth/current-user"), exports);
 __exportStar(require("./auth/update-user"), exports);
 __exportStar(require("./auth/delete-account"), exports);

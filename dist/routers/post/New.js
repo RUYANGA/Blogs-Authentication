@@ -16,19 +16,22 @@ exports.newPostRouter = void 0;
 const express_1 = require("express");
 const Post_1 = __importDefault(require("../../modeles/Post"));
 const user_1 = __importDefault(require("../../modeles/user"));
-const common_1 = require("../../common/");
+const cloudinaryConfg_1 = __importDefault(require("../../common/utile/cloudinaryConfg"));
+const multer_1 = __importDefault(require("../../common/utile/multer"));
 const router = (0, express_1.Router)();
 exports.newPostRouter = router;
-router.post('/post/new/:id', common_1.uploadImages, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/post/new/:id', multer_1.default.single('image'), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        //if(!req.file)return next(new Error('Images required'));
-        //let image:Array<Express.Multer.File>
-        // if(typeof req.file==='object'){
-        //     image=Object.values(req.file)
-        // }else{
-        //     image=req.file?[...req.file]:[]
-        // }
+        if (!req.file) {
+            const error = new Error('Image required');
+            error.status = 400;
+            return next(error);
+        }
+        const resultImage = yield cloudinaryConfg_1.default.uploader.upload(req.file.path, {
+            folder: 'uploads'
+        });
+        console.log('images', resultImage);
         const { title, content } = req.body;
         const Id = req.params.id;
         const userId = yield user_1.default.findById(Id);
@@ -44,29 +47,20 @@ router.post('/post/new/:id', common_1.uploadImages, (req, res, next) => __awaite
             error.status = 400;
             return next(error);
         }
-        // images:images.map((file:Express.Multer.File)=>{
-        //             let srcObj={src:`data:${file.mimetype};base64,${file.buffer.toString('base64')}`}
-        //             fs.unlink(path.join('uploads/' +file.filename),()=>{})
-        //             return srcObj
-        //         })
-        let savePost;
-        try {
-            savePost = Post_1.default.build({
-                user: Id,
-                title,
-                content,
-            });
-            yield savePost.save();
-            yield user_1.default.findByIdAndUpdate({ _id: (_a = req.currentUser) === null || _a === void 0 ? void 0 : _a.id }, { $push: { posts: savePost._id } });
-        }
-        catch (err) {
-            const error = new Error('Post can not created');
-            error.status = 500;
-            return next(error);
-        }
-        res.status(201).json({ message: savePost });
+        const savePost = Post_1.default.build({
+            user: Id,
+            title,
+            content,
+            images: resultImage.secure_url
+        });
+        yield savePost.save();
+        yield user_1.default.findByIdAndUpdate({ _id: (_a = req.currentUser) === null || _a === void 0 ? void 0 : _a.id }, { $push: { posts: savePost._id } });
+        res.status(200).json({ Posts: savePost });
     }
-    catch (error) {
-        next(new Error('Post can not created'));
+    catch (err) {
+        const error = new Error('Post can not created');
+        error.status = 500;
+        return next(error);
+        console.log(err);
     }
 }));

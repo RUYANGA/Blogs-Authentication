@@ -18,3 +18,5 @@ __exportStar(require("../common/middlewares/current-user"), exports);
 __exportStar(require("../common/middlewares/require-auth"), exports);
 __exportStar(require("../common/middlewares/admn-access"), exports);
 __exportStar(require("../common/middlewares/upload-image"), exports);
+__exportStar(require("../common/utile/cloudinaryConfg"), exports);
+__exportStar(require("../common/utile/multer"), exports);

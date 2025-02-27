@@ -1,28 +1,30 @@
 import { Router,Request,Response,NextFunction } from "express";
 import Post from '../../modeles/Post'
 import  User  from '../../modeles/user'
-import{ uploadImages } from '../../common/'
-import fs from 'fs'
-import path from "path";
+import cloudinary from "../../common/utile/cloudinaryConfg";
+import upload from "../../common/utile/multer";
+
 
 
 
 
 const router=Router();
 
-router.post('/post/new/:id',uploadImages,async(req:Request,res:Response,next:NextFunction)=>{
+router.post('/post/new/:id',upload.single('image'),async(req:Request,res:Response,next:NextFunction)=>{
    try {
 
 
-        //if(!req.file)return next(new Error('Images required'));
-
-        //let image:Array<Express.Multer.File>
-
-        // if(typeof req.file==='object'){
-        //     image=Object.values(req.file)
-        // }else{
-        //     image=req.file?[...req.file]:[]
-        // }
+        if(!req.file){
+            const error=new Error('Image required') as CustomError;
+            error.status=400
+            return next(error)
+        }
+    
+        const resultImage=await cloudinary.uploader.upload(req.file.path,{
+            folder:'uploads'
+        })
+        console.log('images',resultImage)
+        
 
         const {title,content}=req.body;
         const Id=req.params.id
@@ -41,37 +43,26 @@ router.post('/post/new/:id',uploadImages,async(req:Request,res:Response,next:Nex
             return next(error)
         }
 
-        // images:images.map((file:Express.Multer.File)=>{
-        //             let srcObj={src:`data:${file.mimetype};base64,${file.buffer.toString('base64')}`}
-                    
-        //             fs.unlink(path.join('uploads/' +file.filename),()=>{})
-
-        //             return srcObj
-        //         })
-
-        let savePost
-        try {
-             savePost= Post.build({
+    
+        const savePost= Post.build({
                 user:Id,
                 title,
                 content,
+                images:resultImage.secure_url
                 
             });
 
             await savePost.save()
 
            await User.findByIdAndUpdate({_id:req.currentUser?.id},{$push:{posts:savePost._id}})
+           res.status(200).json({Posts:savePost})
 
-        } catch (err) {
+    } catch (err) {
             const error=new Error('Post can not created') as CustomError
             error.status=500;
             return next(error)
+            console.log(err)
         }
-
-        res.status(201).json({message:savePost});
-   } catch (error) {
-        next(new Error('Post can not created'));
-   }
 })
 
 export {router as newPostRouter}

@@ -33,7 +33,7 @@ router.post('/user/signin', async(req:Request,res:Response,next:NextFunction)=>{
 
     req.session= { jwt:token}
 
-    res.status(200).json({User:userExist})
+    res.status(200).json({User:userExist,token:token})
 
 
 })

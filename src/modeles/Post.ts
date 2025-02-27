@@ -7,15 +7,16 @@ export interface PostDoc extends mongoose.Document{
     user:string,
     title:string,
     content:string,
-    images:Array<{src:string}>,
-    //comment?:Array<commentDoc>
+    images:string[],
+    comment?:Array<commentDoc>
 }
 
 export interface CreatePostDto{
     user:string,
     title:string,
-    //images:Array<{src:string}>,
-    content:string
+    images:string,
+    content:string[],
+    comment?:Array<commentDoc>
 }
 
 export interface PostModule extends mongoose.Model<PostDoc>{
@@ -36,11 +37,10 @@ const postSchem=new mongoose.Schema({
         type:String,
         required:true
     },
-    images:[
-        {src:{type:String,
-            required:true
-        }}
-    ],
+    images:{
+        type:String,
+        required:true
+    },
     comment:[
         {
             type:mongoose.Schema.Types.ObjectId,

@@ -6,7 +6,7 @@ import mongoose from 'mongoose'
 import cors from 'cors'
 import cookieSession from "cookie-session";
 import {newPostRouter,showPostRouter,updatePostRouter,deletePostRouter,newCommentRouter,deleteCommentRouter,signupRouter, signinRouter, updateUserRouter, deleteUserRouter} from './routers'
-import { currentUser, requireAuth } from "./common";
+import { currentUser, requireAuth, requireOwner } from "./common";
 import { signoutRouter } from "./routers/auth/signout";
 
 const url=process.env.MONGODB_URL as string
